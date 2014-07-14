@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.ImageView;
 
 public class ImageUtil {
 
@@ -25,5 +28,12 @@ public class ImageUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void showPopupImage(Activity act, Bitmap bitmap) {
+        ImageView view = new ImageView(act);
+        view.setImageBitmap(bitmap);
+        AlertDialog.Builder builder = new AlertDialog.Builder(act).setView(view);
+        builder.show();
     }
 }
