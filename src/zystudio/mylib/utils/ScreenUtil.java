@@ -3,6 +3,7 @@ package zystudio.mylib.utils;
 import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
+import android.view.View.MeasureSpec;
 
 public class ScreenUtil {
 
@@ -15,6 +16,26 @@ public class ScreenUtil {
     public static int getScreenHeight(Context context) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         return metrics.heightPixels;
+    }
+
+    public static String getMeasureSpecInfo(int measureSpec) {
+        final int mode = MeasureSpec.getMode(measureSpec);
+        final int size = MeasureSpec.getSize(measureSpec);
+        String modeStr = null;
+        switch (mode) {
+        case MeasureSpec.AT_MOST:
+            modeStr = "AT_MOST";
+            break;
+        case MeasureSpec.EXACTLY:
+            modeStr = "EXACTLY";
+            break;
+        case MeasureSpec.UNSPECIFIED:
+            modeStr = "UNSPECIFIED";
+            break;
+        default:
+            modeStr = "Error! not exists a mode value!";
+        }
+        return modeStr + "|size is:" + size;
     }
 
     public static String getMotionActionStr(int i) {
