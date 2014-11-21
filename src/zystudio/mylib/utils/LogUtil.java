@@ -54,8 +54,9 @@ public class LogUtil {
                     // 因为className中有很多包名，看上去很不方便，所以我们只想让其显示最后一个点后边的东西，也就是类的名字
                     int classIndex = className.lastIndexOf(".");
                     className = className.substring(classIndex + 1);
-                    String log = Thread.currentThread().getId() + " " + Thread.currentThread().getName() + " "
-                            + className + "  " + methodName + "\n";
+                    String log = Thread.currentThread().getId() + " "
+                            + Thread.currentThread().getName() + " " + className + "  "
+                            + methodName + "\n";
                     logBuilder.append(log);
                 }
             }
@@ -67,8 +68,7 @@ public class LogUtil {
         }
     }
 
-    public static void printStackTrace(String appendMsg, int minRange,
-            int maxRange) {
+    public static void printStackTrace(String appendMsg, int minRange, int maxRange) {
         StringBuilder logBuilder = new StringBuilder();
         logBuilder.append("PrintStackStart------------------------\n");
         StackTraceElement[] array = Thread.currentThread().getStackTrace();
@@ -81,8 +81,9 @@ public class LogUtil {
                     // 因为className中有很多包名，看上去很不方便，所以我们只想让其显示最后一个点后边的东西，也就是类的名字
                     int classIndex = className.lastIndexOf(".");
                     className = className.substring(classIndex + 1);
-                    String log = Thread.currentThread().getId() + " " + Thread.currentThread().getName() + " "
-                            + className + "  " + methodName + "\n";
+                    String log = Thread.currentThread().getId() + " "
+                            + Thread.currentThread().getName() + " " + className + "  "
+                            + methodName + "\n";
                     logBuilder.append(log);
                 }
             }
@@ -92,5 +93,19 @@ public class LogUtil {
             logBuilder.append("PrintStackEnd------------------------\n");
             log(logBuilder.toString());
         }
+    }
+
+    public static void printTime(String perfix) {
+        long time = System.currentTimeMillis() % 100000;
+        log(perfix + " :" + time);
+    }
+
+    public static void logException(Exception e) {
+        logException(null, e);
+    }
+
+    public static void logException(String prefix, Exception e) {
+        prefix=TextUtils.isEmpty(prefix)?"":prefix+":";
+        LogUtil.log(prefix + e.getClass().getSimpleName() + "|" + e.getMessage());
     }
 }
