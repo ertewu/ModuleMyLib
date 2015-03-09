@@ -9,6 +9,9 @@ public class LogUtil {
     public static void log(String str) {
         Log.i(TAG, str);
     }
+    public static void log(String tag,String msg){
+        Log.i(tag, msg);
+    }
 
     /**
      * 打印调用printFuncInfo 的那个方法的信息:包括方法所在的类，方法名称,以及当前调用所在的线程Id
@@ -66,6 +69,13 @@ public class LogUtil {
             logBuilder.append("PrintStackEnd------------------------\n");
             log(logBuilder.toString());
         }
+    }
+
+    public static void printInvokeFuncMsg(){
+        StackTraceElement[] array = Thread.currentThread().getStackTrace();
+        int maxRange=array.length-2;
+        int minRange=array.length-4;
+        printStackTrace("",minRange,maxRange);
     }
 
     public static void printStackTrace(String appendMsg, int minRange, int maxRange) {
