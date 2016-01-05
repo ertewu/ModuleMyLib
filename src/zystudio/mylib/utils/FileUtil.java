@@ -26,6 +26,12 @@ public class FileUtil {
         }
     }
 
+    /**
+     * 貌似现在这个不是很好用,有一些问题
+     * 
+     * @param path
+     * @param data
+     */
     public static void exportBytesToFileWithBOStream(String path, byte[] data) {
 
         FileOutputStream fos = null;

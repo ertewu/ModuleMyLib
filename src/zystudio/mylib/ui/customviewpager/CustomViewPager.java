@@ -455,7 +455,7 @@ public class CustomViewPager extends ViewGroup {
         if (mFirstLayout) {
             // We don't have any idea how big we are yet and shouldn't have any pages either.
             // Just set things up and let the pending layout handle things.
-          //  mCurItem = item;
+            mCurItem = item;
             if (dispatchSelected && mOnPageChangeListener != null) {
                 mOnPageChangeListener.onPageSelected(item, always);
             }
@@ -703,7 +703,7 @@ public class CustomViewPager extends ViewGroup {
         if (mCurItem != newCurrentItem) {
             focusDirection = mCurItem < newCurrentItem ? View.FOCUS_RIGHT : View.FOCUS_LEFT;
             oldCurInfo = infoForPosition(mCurItem);
-           // mCurItem = newCurrentItem;
+            mCurItem = newCurrentItem;
         }
 
         if (mAdapter == null) {
@@ -729,8 +729,10 @@ public class CustomViewPager extends ViewGroup {
         }
 
         mAdapter.startUpdate(this);
-
+        final int pageLimit=mOffscreenPageLimit;
+        final int startPos=Math.max(0, mCurItem-pageLimit);
         final int N = mAdapter.getCount();
+        final int endPos=Math.min(N-1, mCurItem+pageLimit);
 
         if (N != mExpectedAdapterCount) {
             String resName;
@@ -764,8 +766,82 @@ public class CustomViewPager extends ViewGroup {
         if (curItem == null && N > 0) {
             curItem = addNewItem(newCurrentItem, curIndex);
         }
+        
+        //-----------------我从源码中拿过来那一段
+        // Fill 3x the available width or up to the number of offscreen
+        // pages requested to either side, whichever is larger.
+        // If we have no current item we have no work to do.
+        if (curItem != null) {
+            float extraWidthLeft = 0.f;
+            int itemIndex = curIndex - 1;
+            ItemInfo ii = itemIndex >= 0 ? mItems.get(itemIndex) : null;
+            final int clientWidth = getClientWidth();
+            final float leftWidthNeeded = clientWidth <= 0 ? 0 :
+                    2.f - curItem.widthFactor + (float) getPaddingLeft() / (float) clientWidth;
+            for (int pos = mCurItem - 1; pos >= 0; pos--) {
+                if (extraWidthLeft >= leftWidthNeeded && pos < startPos) {
+                    if (ii == null) {
+                        break;
+                    }
+                    if (pos == ii.position && !ii.scrolling) {
+                        mItems.remove(itemIndex);
+                        mAdapter.destroyItem(this, pos, ii.object);
+                        if (DEBUG) {
+                            Log.i(TAG, "populate() - destroyItem() with pos: " + pos +
+                                    " view: " + ((View) ii.object));
+                        }
+                        itemIndex--;
+                        curIndex--;
+                        ii = itemIndex >= 0 ? mItems.get(itemIndex) : null;
+                    }
+                } else if (ii != null && pos == ii.position) {
+                    extraWidthLeft += ii.widthFactor;
+                    itemIndex--;
+                    ii = itemIndex >= 0 ? mItems.get(itemIndex) : null;
+                } else {
+                    ii = addNewItem(pos, itemIndex + 1);
+                    extraWidthLeft += ii.widthFactor;
+                    curIndex++;
+                    ii = itemIndex >= 0 ? mItems.get(itemIndex) : null;
+                }
+            }
 
+            float extraWidthRight = curItem.widthFactor;
+            itemIndex = curIndex + 1;
+            if (extraWidthRight < 2.f) {
+                ii = itemIndex < mItems.size() ? mItems.get(itemIndex) : null;
+                final float rightWidthNeeded = clientWidth <= 0 ? 0 :
+                        (float) getPaddingRight() / (float) clientWidth + 2.f;
+                for (int pos = mCurItem + 1; pos < N; pos++) {
+                    if (extraWidthRight >= rightWidthNeeded && pos > endPos) {
+                        if (ii == null) {
+                            break;
+                        }
+                        if (pos == ii.position && !ii.scrolling) {
+                            mItems.remove(itemIndex);
+                            mAdapter.destroyItem(this, pos, ii.object);
+                            if (DEBUG) {
+                                Log.i(TAG, "populate() - destroyItem() with pos: " + pos +
+                                        " view: " + ((View) ii.object));
+                            }
+                            ii = itemIndex < mItems.size() ? mItems.get(itemIndex) : null;
+                        }
+                    } else if (ii != null && pos == ii.position) {
+                        extraWidthRight += ii.widthFactor;
+                        itemIndex++;
+                        ii = itemIndex < mItems.size() ? mItems.get(itemIndex) : null;
+                    } else {
+                        ii = addNewItem(pos, itemIndex);
+                        itemIndex++;
+                        extraWidthRight += ii.widthFactor;
+                        ii = itemIndex < mItems.size() ? mItems.get(itemIndex) : null;
+                    }
+                }
+            }
+
+        //-----------------我从源码中拿过来那一段end
         calculatePageOffsets(curItem, curIndex, oldCurInfo);
+        }
         if (DEBUG) {
             Log.i(TAG, "Current page list:");
             for (int i=0; i<mItems.size(); i++) {
@@ -1560,7 +1636,7 @@ public class CustomViewPager extends ViewGroup {
             case MotionEvent.ACTION_DOWN: {
                 mScroller.abortAnimation();
                 mPopulatePending = false;
-               // populate();
+                populate();
 
                 // Remember where the motion event started
                 mLastMotionX = mInitialMotionX = ev.getX();
