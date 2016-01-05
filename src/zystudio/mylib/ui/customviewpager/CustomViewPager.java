@@ -455,7 +455,7 @@ public class CustomViewPager extends ViewGroup {
         if (mFirstLayout) {
             // We don't have any idea how big we are yet and shouldn't have any pages either.
             // Just set things up and let the pending layout handle things.
-            mCurItem = item;
+            // mCurItem = item;
             if (dispatchSelected && mOnPageChangeListener != null) {
                 mOnPageChangeListener.onPageSelected(item, always);
             }
@@ -703,7 +703,7 @@ public class CustomViewPager extends ViewGroup {
         if (mCurItem != newCurrentItem) {
             focusDirection = mCurItem < newCurrentItem ? View.FOCUS_RIGHT : View.FOCUS_LEFT;
             oldCurInfo = infoForPosition(mCurItem);
-            mCurItem = newCurrentItem;
+            // mCurItem = newCurrentItem;
         }
 
         if (mAdapter == null) {
@@ -1636,7 +1636,7 @@ public class CustomViewPager extends ViewGroup {
             case MotionEvent.ACTION_DOWN: {
                 mScroller.abortAnimation();
                 mPopulatePending = false;
-                populate();
+            // populate();
 
                 // Remember where the motion event started
                 mLastMotionX = mInitialMotionX = ev.getX();
