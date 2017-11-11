@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/zylab/1_Develop/6_Repo_Network/ModuleMyLib/build/intermediates/res/merged/androidTest/debug/values_values.arsc.flat",
+            "map": [
+                {
+                    "source": "/Users/zylab/1_Develop/6_Repo_Network/ModuleMyLib/build/intermediates/bundles/debug/res/values/values.xml",
+                    "from": {
+                        "startLines": "2,3,10",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,98,389",
+                        "endLines": "2,9,12",
+                        "endColumns": "42,12,12",
+                        "endOffsets": "93,384,544"
+                    }
+                }
+            ]
+        }
+    ]
+}

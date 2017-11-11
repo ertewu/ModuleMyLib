@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/Users/zylab/1_Develop/6_Repo_Network/ModuleMyLib/src/main/assets"><file name="skin_select.png" path="/Users/zylab/1_Develop/6_Repo_Network/ModuleMyLib/src/main/assets/skin_select.png"/></source><source path="/Users/zylab/1_Develop/6_Repo_Network/ModuleMyLib/build/generated/assets/shaders/debug"/></dataSet><dataSet config="debug"><source path="/Users/zylab/1_Develop/6_Repo_Network/ModuleMyLib/src/debug/assets"/></dataSet></merger>
